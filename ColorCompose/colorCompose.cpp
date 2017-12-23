@@ -38,6 +38,11 @@ ComposeConfig testcfgs[] = {
 	{Coverage, 0.29}, {PreMultiplied, 0.65},
 	{PreMultiplied, 0.29}, {Coverage, 0.65},
 	{Coverage, 0.29}, {Coverage, 0.65},
+	
+	//11 ~ 13
+	{PreMultiplied, 1}, {PreMultiplied, 0.29},
+	{Coverage, 1}, {PreMultiplied, 0.29},
+	{Coverage, 1}, {Coverage, 0.29},
 };
 
 
@@ -57,7 +62,6 @@ void oneLayerBlend(struct Color src, struct ComposeConfig srcConfig, struct Colo
 		B = src.B + dst.B * ((255 - src.Alpha)/255);
 		A = src.Alpha + dst.Alpha * ((255 - src.Alpha)/255);
 		#else
-		R = src.R * gA + dst.R * ((255.0 - src.Alpha * gA)/255.0);
 		R = src.R * gA + dst.R * ((255.0  - src.Alpha * gA)/255.0);
 		G = src.G * gA + dst.G * ((255.0  - src.Alpha * gA)/255.0);
 		B = src.B * gA + dst.B * ((255.0 - src.Alpha * gA)/255.0);
@@ -84,10 +88,10 @@ void oneLayerBlend(struct Color src, struct ComposeConfig srcConfig, struct Colo
 		A = 255.0;
 	}
 	
-	dst.R = R;
-	dst.G = G;
-	dst.B = B;
-	dst.Alpha = A;
+	dst.R = R >= 255.0 ? 255.0 : R;
+	dst.G = G >= 255.0 ? 255.0 : G;
+	dst.B = B >= 255.0 ? 255.0 : B;
+	dst.Alpha = A >= 255.0 ? 255.0 : A;
 }
 
 void twoLayerBlend(struct Color& srcTop, struct ComposeConfig & srcTopCfg,
